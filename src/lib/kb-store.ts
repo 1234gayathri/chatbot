@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 
 export type DocStatus = "processing" | "ready" | "error";
 export type DocItem = {
@@ -12,29 +13,50 @@ export type DocItem = {
   contentChunks?: string[];
 };
 
-const KEY = "infyskill.kb.docs.v1";
 const QKEY = "infyskill.kb.queries.v1";
 
-function load(): DocItem[] {
-  if (typeof window === "undefined") return [];
-  try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch { return []; }
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL || "",
+  import.meta.env.VITE_SUPABASE_ANON_KEY || ""
+);
+
+let memoryCache: DocItem[] = [];
+
+async function syncFromSupabase() {
+  if (typeof window === "undefined") return;
+  const { data, error } = await supabase.from("kb_docs").select("data").order("created_at", { ascending: false });
+  if (!error && data) {
+    memoryCache = data.map(row => row.data as DocItem);
+    window.dispatchEvent(new Event("kb:change"));
+  }
 }
+
+// Initial sync
+if (typeof window !== "undefined") {
+  syncFromSupabase();
+}
+
+function load(): DocItem[] {
+  return memoryCache;
+}
+
 function save(d: DocItem[]) {
-  localStorage.setItem(KEY, JSON.stringify(d));
+  memoryCache = d;
   window.dispatchEvent(new Event("kb:change"));
 }
 
+async function upsertSupabase(doc: DocItem) {
+  if (typeof window === "undefined") return;
+  await supabase.from("kb_docs").upsert({ id: doc.id, data: doc });
+}
+
 export function useDocs() {
-  const [docs, setDocs] = useState<DocItem[]>([]);
+  const [docs, setDocs] = useState<DocItem[]>(memoryCache);
   useEffect(() => {
     setDocs(load());
     const h = () => setDocs(load());
     window.addEventListener("kb:change", h);
-    window.addEventListener("storage", h);
-    return () => {
-      window.removeEventListener("kb:change", h);
-      window.removeEventListener("storage", h);
-    };
+    return () => window.removeEventListener("kb:change", h);
   }, []);
   return docs;
 }
@@ -147,6 +169,7 @@ export function addDocs(files: File[]) {
     chunks: 0,
   }));
   save([...incoming, ...current]);
+  incoming.forEach(d => upsertSupabase(d));
 
   // Process files asynchronously
   incoming.forEach(async (doc, i) => {
@@ -163,6 +186,7 @@ export function addDocs(files: File[]) {
         contentChunks: chunks,
       };
       save(all);
+      upsertSupabase(all[idx]);
     }
   });
 }
@@ -188,6 +212,7 @@ export async function addUrl(urlString: string) {
   };
   
   save([urlItem, ...current]);
+  upsertSupabase(urlItem);
 
   try {
     // Fetch using a public CORS proxy
@@ -236,6 +261,7 @@ export async function addUrl(urlString: string) {
         contentChunks: chunks,
       };
       save(all);
+      upsertSupabase(all[idx]);
     }
   } catch (err) {
     console.error("Error fetching/parsing URL:", err);
@@ -248,6 +274,7 @@ export async function addUrl(urlString: string) {
         chunks: 0,
       };
       save(all);
+      upsertSupabase(all[idx]);
     }
   }
 }
@@ -255,6 +282,9 @@ export async function addUrl(urlString: string) {
 export function removeDoc(id: string) {
   const updatedDocs = load().filter((d) => d.id !== id);
   save(updatedDocs);
+  if (typeof window !== "undefined") {
+    supabase.from("kb_docs").delete().eq("id", id).then();
+  }
   if (updatedDocs.length === 0) {
     localStorage.setItem(QKEY, "0");
     window.dispatchEvent(new Event("kb:change"));
