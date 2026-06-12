@@ -76,7 +76,6 @@ function AdminPortal() {
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-6">
             <UploadZone />
-            <UrlZone />
           </div>
           <KbStatus ready={ready.length} processing={docs.filter((d) => d.status === "processing").length} chunks={totalChunks} />
         </div>
