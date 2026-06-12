@@ -215,9 +215,14 @@ export async function addUrl(urlString: string) {
   upsertSupabase(urlItem);
 
   try {
-    // Fetch using a public CORS proxy
+    // Fetch using a public CORS proxy with a 10-second timeout
     const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
-    const res = await fetch(proxyUrl);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    
+    const res = await fetch(proxyUrl, { signal: controller.signal });
+    clearTimeout(timeoutId);
+    
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const html = await res.text();
     
