@@ -103,6 +103,12 @@ async function extractTextFromPdf(file: File): Promise<string> {
     const textContent = await page.getTextContent();
     const pageText = textContent.items.map((item: any) => item.str).join(" ");
     text += pageText + "\n";
+    
+    // Prevent browser crash and infinite hanging on massive books
+    if (text.length > 500000) {
+      text = text.slice(0, 500000);
+      break;
+    }
   }
   return text;
 }
