@@ -187,12 +187,7 @@ function ChatScreen() {
   function WelcomeHero({ onPick, docs }: { onPick: (q: string) => void; docs: DocItem[] }) {
     const readyDocs = docs.filter(d => d.status === "ready");
     
-    let suggestions = [
-      { q: "What is the TCS Digital salary package?", icon: Sparkles },
-      { q: "Explain the hiring process.", icon: ShieldCheck },
-      { q: "Summarize the uploaded document.", icon: FileText },
-      { q: "What are the eligibility criteria?", icon: Brain },
-    ];
+    let suggestions: { q: string, icon: any }[] = [];
 
     if (readyDocs.length > 0) {
       const dynamic = generateDynamicQueries(docs);
