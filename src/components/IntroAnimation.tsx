@@ -1,7 +1,6 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import { ParticleField } from "./ParticleField";
-import { Brain } from "lucide-react";
 
 export function IntroAnimation({ onDone }: { onDone: () => void }) {
   const [show, setShow] = useState(true);
@@ -76,18 +75,18 @@ export function IntroAnimation({ onDone }: { onDone: () => void }) {
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="relative mb-6 grid h-24 w-24 place-items-center rounded-3xl"
-              style={{ background: "var(--gradient-primary)", boxShadow: "0 0 80px oklch(0.62 0.22 275 / 70%)" }}
+              className="relative mb-8 flex items-center justify-center rounded-2xl py-4 px-6 bg-white/5 border border-white/10"
+              style={{ boxShadow: "0 0 80px oklch(0.62 0.22 275 / 30%)" }}
             >
-              <Brain className="h-12 w-12 text-white" strokeWidth={2.2} />
+              <img src="/logo.png" alt="InfySkill Software Solutions" className="h-12 sm:h-16 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]" />
               {/* Light sweep */}
               <motion.div
                 initial={{ x: "-150%" }}
                 animate={{ x: "150%" }}
                 transition={{ delay: 2.2, duration: 1.2, ease: "easeInOut" }}
-                className="absolute inset-0 overflow-hidden rounded-3xl"
+                className="absolute inset-0 overflow-hidden rounded-2xl"
               >
-                <div className="h-full w-1/2 bg-gradient-to-r from-transparent via-white/60 to-transparent skew-x-12" />
+                <div className="h-full w-1/2 bg-gradient-to-r from-transparent via-white/15 to-transparent skew-x-12" />
               </motion.div>
             </motion.div>
 

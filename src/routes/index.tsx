@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Brain, Send, Mic, Sparkles, FileText, ShieldCheck } from "lucide-react";
+import { Send, Mic, Sparkles, FileText, ShieldCheck, Cpu } from "lucide-react";
 import { IntroAnimation } from "@/components/IntroAnimation";
 import { ParticleField } from "@/components/ParticleField";
 import { useDocs, bumpQueries, DocItem, retrieveRelevantChunks, generateAnswer, generateDynamicQueries } from "@/lib/kb-store";
@@ -270,7 +270,7 @@ function ChatScreen() {
     if (readyDocs.length > 0) {
       const dynamic = generateDynamicQueries(docs);
       if (dynamic.length > 0) {
-        const icons = [Sparkles, ShieldCheck, FileText, Brain];
+        const icons = [Sparkles, ShieldCheck, FileText, Cpu];
         suggestions = dynamic.map((d, i) => ({
           q: d.q,
           icon: icons[i % icons.length]
@@ -330,8 +330,8 @@ function MessageBubble({ msg, stage }: { msg: Msg; stage: number }) {
   }
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex gap-3">
-      <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl mt-1" style={{ background: "var(--gradient-primary)" }}>
-        <Brain className="h-4 w-4 text-white" />
+      <div className="h-8 w-8 shrink-0 rounded-xl overflow-hidden mt-1 border border-white/10 shadow-soft bg-zinc-900">
+        <img src="/icon-192.png" alt="InfySkill Assistant" className="h-full w-full object-cover" />
       </div>
       <div className="max-w-[85%] flex-1">
         {msg.thinking ? (

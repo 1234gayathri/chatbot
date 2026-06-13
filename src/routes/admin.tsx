@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
-  Brain, Upload, FileText, Trash2, Database, Cpu, Layers, Activity,
+  Upload, FileText, Trash2, Database, Cpu, Layers, Activity,
   CheckCircle2, Loader2, Sparkles, FileType2, Globe, Plus
 } from "lucide-react";
 import { useDocs, addDocs, removeDoc, getQueries, addUrl } from "@/lib/kb-store";
@@ -10,7 +10,7 @@ import { useDocs, addDocs, removeDoc, getQueries, addUrl } from "@/lib/kb-store"
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Admin Portal · InfySkill AI" },
+      { title: "Admin Portal · InfySkill AI Assistant" },
       { name: "description", content: "Upload and manage documents in the InfySkill RAG knowledge base." },
     ],
   }),
