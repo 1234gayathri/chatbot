@@ -335,35 +335,8 @@ function mockAnswer(q: string, docs: DocItem[]): { text: string; source: string 
     };
   }
 
-  // Fallback to overview info if no exact match in the documents but keywords match general RAG queries
-  const lower = q.toLowerCase();
-  if (lower.includes("salary") || lower.includes("package")) {
-    return {
-      text: "Based on the indexed documents, the TCS Digital salary package is approximately ₹7 LPA for fresh graduates, with additional performance-linked variable components. Senior Digital roles can scale up to ₹11 LPA depending on skill assessments.",
-      source: "TCS_Digital_Overview.pdf"
-    };
-  }
-  if (lower.includes("hiring") || lower.includes("process")) {
-    return {
-      text: "The hiring process consists of: (1) Online aptitude + coding assessment, (2) Technical interview focused on data structures and projects, (3) Managerial round, and (4) HR discussion. The end-to-end cycle typically takes 2–3 weeks.",
-      source: "TCS_Hiring_Guidelines.pdf"
-    };
-  }
-  if (lower.includes("summar")) {
-    return {
-      text: "The document outlines eligibility criteria, the recruitment timeline, compensation structure, and onboarding logistics for the TCS Digital track. Key highlights: 60% throughout academics, no active backlogs, and a 2-year service agreement.",
-      source: "TCS_Overview.pdf"
-    };
-  }
-  if (lower.includes("eligibility") || lower.includes("criteria")) {
-    return {
-      text: "Eligibility: 60% or above in 10th, 12th, and graduation; no active backlogs at the time of joining; maximum gap of 2 years in education. Branches: B.E./B.Tech/M.E./M.Tech/MCA from recognised universities.",
-      source: "TCS_Eligibility.pdf"
-    };
-  }
-
   return {
-    text: "Could you please rephrase or try another query?",
-    source: readyDocs[0]?.name || "knowledge_base.pdf"
+    text: "I couldn't find a specific answer to that in the indexed documents. Could you try rephrasing your question or asking about a different topic mentioned in the text?",
+    source: readyDocs[0]?.name || "Knowledge Base"
   };
 }
