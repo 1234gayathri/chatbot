@@ -59,7 +59,58 @@ function ChatScreen() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [stage, setStage] = useState(0);
+  const [isListening, setIsListening] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const rec = new SpeechRecognition();
+        rec.continuous = false;
+        rec.interimResults = false;
+        rec.lang = "en-US";
+
+        rec.onstart = () => {
+          setIsListening(true);
+        };
+
+        rec.onresult = (event: any) => {
+          const transcript = event.results[0][0].transcript;
+          setInput((prev) => prev + (prev ? " " : "") + transcript);
+        };
+
+        rec.onerror = (event: any) => {
+          console.error("Speech recognition error:", event.error);
+          setIsListening(false);
+        };
+
+        rec.onend = () => {
+          setIsListening(false);
+        };
+
+        recognitionRef.current = rec;
+      }
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) {
+      alert("Speech recognition is not supported in your browser. Please try Google Chrome, Microsoft Edge, or Apple Safari.");
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop();
+    } else {
+      try {
+        recognitionRef.current.start();
+      } catch (err) {
+        console.error("Failed to start speech recognition:", err);
+      }
+    }
+  };
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -149,7 +200,16 @@ function ChatScreen() {
                 placeholder="Is there any queries.."
                 className="flex-1 bg-transparent px-2 py-2.5 text-[15px] outline-none placeholder:text-muted-foreground"
               />
-              <button type="button" className="grid h-10 w-10 place-items-center rounded-xl text-muted-foreground hover:text-foreground hover:bg-white/5 transition">
+              <button
+                type="button"
+                onClick={toggleListening}
+                className={`grid h-10 w-10 place-items-center rounded-xl transition ${
+                  isListening
+                    ? "text-red-500 bg-red-500/10 animate-pulse border border-red-500/30"
+                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                }`}
+                title={isListening ? "Listening... Click to stop" : "Start voice input"}
+              >
                 <Mic className="h-4 w-4" />
               </button>
               <button
