@@ -9,10 +9,10 @@ import { useDocs, bumpQueries, DocItem, retrieveRelevantChunks, generateAnswer, 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "InfySkill AI Document Assistant" },
-      { name: "description", content: "Chat with your documents. RAG-powered enterprise AI assistant by InfySkill Software Solutions." },
-      { property: "og:title", content: "InfySkill AI Document Assistant" },
-      { property: "og:description", content: "Transforming documents into intelligent conversations." },
+      { title: "InfySkill AI Assistant" },
+      { name: "description", content: "Enterprise AI assistant by InfySkill Software Solutions." },
+      { property: "og:title", content: "InfySkill AI Assistant" },
+      { property: "og:description", content: "Intelligent enterprise AI conversations." },
     ],
   }),
   component: ClientPortal,
@@ -206,10 +206,10 @@ function ChatScreen() {
           <Brain className="h-10 w-10 text-white" />
         </div>
         <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
-          Ask Anything About <span className="gradient-text">Your Documents</span>
+          How can I help you <span className="gradient-text">today?</span>
         </h1>
         <p className="mt-3 text-muted-foreground max-w-xl mx-auto text-sm sm:text-base">
-          Powered by Retrieval-Augmented Generation (RAG). Get instant, source-cited answers grounded in your knowledge base.
+          Get instant, intelligent answers to your questions, powered by advanced AI.
         </p>
 
         <div className="mt-10 grid gap-3 sm:grid-cols-2">
