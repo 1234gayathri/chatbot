@@ -165,8 +165,8 @@ function ChatScreen() {
       {/* Header */}
       <header className="relative z-10 border-b border-white/5 glass-strong">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-3.5">
-          <Link to="/" className="flex items-center bg-white/95 hover:bg-white rounded-lg px-3 py-1 transition shadow-glow select-none">
-            <img src="/logo.png" alt="InfySkill Software Solutions" className="h-7 w-auto object-contain" />
+          <Link to="/" className="flex items-center group select-none transition hover:opacity-90">
+            <img src="/logo.png" alt="InfySkill Software Solutions" className="h-8 w-auto object-contain filter drop-shadow-[0_0_8px_rgba(255,255,255,0.15)]" />
           </Link>
 
 
@@ -280,8 +280,8 @@ function ChatScreen() {
 
     return (
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center pt-8 sm:pt-16">
-        <div className="relative mx-auto mb-8 flex justify-center bg-white/95 rounded-2xl px-5 py-3.5 max-w-[280px] shadow-glow select-none animate-pulse-glow">
-          <img src="/logo.png" alt="InfySkill Software Solutions Logo" className="h-14 w-auto object-contain" />
+        <div className="relative mx-auto mb-8 flex justify-center select-none max-w-[280px] animate-pulse-glow">
+          <img src="/logo.png" alt="InfySkill Software Solutions Logo" className="h-14 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]" />
         </div>
         <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
           How can I help you <span className="gradient-text">today?</span>
