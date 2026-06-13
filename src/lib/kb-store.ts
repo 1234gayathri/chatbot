@@ -569,7 +569,7 @@ export function generateAnswer(query: string, retrieved: RetrievalResult[]): str
     }
   });
 
-  response += "\nLet me know if you would like to ask anything else about the documents.";
+  response += "\nFeel free to ask if you have any other questions!";
   return response;
 }
 

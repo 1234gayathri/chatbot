@@ -316,27 +316,97 @@ function ConfidenceBar({ value }: { value: number }) {
   );
 }
 
-function mockAnswer(q: string, docs: DocItem[]): { text: string; source: string } {
-  const readyDocs = docs.filter((d) => d.status === "ready");
+const INFYSKILL_KNOWLEDGE = [
+  {
+    keys: ["about", "what is infyskill", "who is infyskill", "company", "who are you", "what is this website", "tell me about your company"],
+    answer: "InfySkill (legally registered as InfySkill Edutech Private Limited) is a premier technology training, software development, and career solutions organization based in Visakhapatnam, Andhra Pradesh. Founded in 2023, InfySkill bridges the gap between academic education and industry requirements by providing top-tier training, skill development, and career placement support."
+  },
+  {
+    keys: ["ceo", "cto", "founder", "founded", "valluru", "samara", "pravallika", "ganagalla", "who runs", "leadership", "management"],
+    answer: "InfySkill Software Solutions was founded in April 2023. Our key leadership includes:\n• Valluru Samara Simha Reddy (CEO & Founder)\n• Pravallika Ganagalla (CTO & Director)\nUnder their leadership, InfySkill is officially recognized by the Ministry of Corporate Affairs, MSME, Startup India (DPIIT), and AICTE."
+  },
+  {
+    keys: ["course", "training", "program", "what do you teach", "learn", "python", "java", "mern", "web dev", "data science", "machine learning", "cloud", "artificial intelligence", "ai"],
+    answer: "InfySkill offers industry-aligned training programs in cutting-edge fields, including:\n• Python & Java Programming\n• Full-Stack Web Development (MERN Stack)\n• Data Science & Machine Learning\n• Artificial Intelligence (AI)\n• Cloud Computing\nEach course is led by industry professionals and features hands-on projects, mock assessments, and comprehensive interview preparation."
+  },
+  {
+    keys: ["service", "software development", "what do you do", "project", "projects", "final year", "research paper", "documentation", "academic support"],
+    answer: "InfySkill provides a comprehensive range of professional services:\n• Software Development: Custom software solutions, web applications, and tech consultation.\n• Academic & Project Support: Mentorship, documentation assistance, research paper guidance, and technical support for final-year engineering projects across various domains.\n• Career Services: Mock interviews, resume reviews, placement preparation, and internship placements."
+  },
+  {
+    keys: ["location", "address", "where", "office", "visakhapatnam", "vizag", "andhra pradesh"],
+    answer: "InfySkill Software Solutions' main office is located in Visakhapatnam, Andhra Pradesh, India. We serve students, graduates, and businesses both locally and online across the nation."
+  },
+  {
+    keys: ["contact", "email", "phone", "website", "reach", "support", "call", "apply"],
+    answer: "You can contact InfySkill Software Solutions through the following channels:\n• Website: https://infyskill.in\n• Services: Software Development, Technical Projects, and Skill Training Programs\n• Support & Inquiries: Please visit our official website or reach out via our contact portals for specific program enrollments."
+  }
+];
+
+function findInfySkillAnswer(query: string): string | null {
+  const qLower = query.toLowerCase();
   
-  if (readyDocs.length === 0) {
+  if (
+    qLower.includes("who are you") || 
+    qLower.includes("what is your name") || 
+    qLower.includes("your identity") || 
+    qLower.includes("who created you")
+  ) {
+    return "I am the official InfySkill AI Assistant. I am designed to assist you with inquiries about InfySkill Software Solutions, our training programs, software services, and other related topics.";
+  }
+
+  let bestMatch: typeof INFYSKILL_KNOWLEDGE[0] | null = null;
+  let maxScore = 0;
+  
+  for (const item of INFYSKILL_KNOWLEDGE) {
+    let score = 0;
+    for (const key of item.keys) {
+      if (qLower.includes(key)) {
+        score += key.length;
+      }
+    }
+    if (score > maxScore) {
+      maxScore = score;
+      bestMatch = item;
+    }
+  }
+  
+  if (maxScore >= 3 && bestMatch) {
+    return bestMatch.answer;
+  }
+  
+  if (qLower.includes("infyskill") || qLower.includes("infy skill")) {
+    return INFYSKILL_KNOWLEDGE[0].answer;
+  }
+  
+  return null;
+}
+
+function mockAnswer(q: string, docs: DocItem[]): { text: string; source: string } {
+  // First, check if there is an InfySkill company-specific answer
+  const infyAnswer = findInfySkillAnswer(q);
+  if (infyAnswer) {
     return {
-      text: "I'm ready, but no documents are loaded into the knowledge base yet. Go to the Admin Portal to upload PDFs, DOCX, or TXT files — once they're indexed, I'll answer with grounded citations from your sources.",
-      source: "System"
+      text: infyAnswer,
+      source: "InfySkill Assistant"
     };
   }
 
+  const readyDocs = docs.filter((d) => d.status === "ready");
+
   // Retrieve relevant chunks dynamically from the uploaded document(s)
-  const retrieved = retrieveRelevantChunks(q, readyDocs);
-  if (retrieved.length > 0) {
-    return {
-      text: generateAnswer(q, retrieved),
-      source: retrieved[0].source
-    };
+  if (readyDocs.length > 0) {
+    const retrieved = retrieveRelevantChunks(q, readyDocs);
+    if (retrieved.length > 0) {
+      return {
+        text: generateAnswer(q, retrieved),
+        source: retrieved[0].source
+      };
+    }
   }
 
   return {
-    text: "I couldn't find a specific answer to that in the indexed documents. Could you try rephrasing your question or asking about a different topic mentioned in the text?",
-    source: readyDocs[0]?.name || "Knowledge Base"
+    text: "As the InfySkill AI Assistant, I couldn't find a specific reference to that. Could you please rephrase your question, or ask about InfySkill's training programs, software development services, academic project support, or contact info?",
+    source: "InfySkill Assistant"
   };
 }
