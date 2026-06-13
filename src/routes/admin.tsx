@@ -38,12 +38,12 @@ function AdminPortal() {
       <header className="border-b border-white/5 glass-strong">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-3.5">
           <div className="flex items-center gap-3">
-            <div className="grid h-9 w-9 place-items-center rounded-xl shadow-glow" style={{ background: "var(--gradient-primary)" }}>
-              <Brain className="h-5 w-5 text-white" />
+            <div className="flex items-center bg-white/95 rounded-lg px-3 py-1 shadow-glow select-none">
+              <img src="/logo.png" alt="InfySkill Software Solutions" className="h-7 w-auto object-contain" />
             </div>
             <div className="leading-tight">
-              <div className="text-sm font-bold tracking-tight">InfySkill <span className="text-muted-foreground font-normal">/ Admin</span></div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Knowledge Base Console</div>
+              <div className="text-sm font-bold tracking-tight text-white">/ Admin</div>
+              <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground">Console</div>
             </div>
           </div>
         </div>

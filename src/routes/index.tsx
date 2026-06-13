@@ -165,14 +165,8 @@ function ChatScreen() {
       {/* Header */}
       <header className="relative z-10 border-b border-white/5 glass-strong">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-3.5">
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="grid h-9 w-9 place-items-center rounded-xl shadow-glow" style={{ background: "var(--gradient-primary)" }}>
-              <Brain className="h-5 w-5 text-white" />
-            </div>
-            <div className="leading-tight">
-              <div className="text-sm font-bold tracking-tight">InfySkill</div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Software Solutions</div>
-            </div>
+          <Link to="/" className="flex items-center bg-white/95 hover:bg-white rounded-lg px-3 py-1 transition shadow-glow select-none">
+            <img src="/logo.png" alt="InfySkill Software Solutions" className="h-7 w-auto object-contain" />
           </Link>
 
 
@@ -286,8 +280,8 @@ function ChatScreen() {
 
     return (
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center pt-8 sm:pt-16">
-        <div className="relative mx-auto mb-6 grid h-20 w-20 place-items-center rounded-3xl animate-pulse-glow" style={{ background: "var(--gradient-primary)" }}>
-          <Brain className="h-10 w-10 text-white" />
+        <div className="relative mx-auto mb-8 flex justify-center bg-white/95 rounded-2xl px-5 py-3.5 max-w-[280px] shadow-glow select-none animate-pulse-glow">
+          <img src="/logo.png" alt="InfySkill Software Solutions Logo" className="h-14 w-auto object-contain" />
         </div>
         <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
           How can I help you <span className="gradient-text">today?</span>
